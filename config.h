@@ -1,6 +1,6 @@
 /* See LICENSE file for copyright and license details. */
 
-static const unsigned int gappx     = 12;       /* gap pixel between windows */
+static const unsigned int gappx     = 4;       /* gap pixel between windows */
 
 static const unsigned int systraypinning = 0;   /* 0: sloppy systray follows selected monitor, >0: pin systray to monitor X */
 static const unsigned int systrayspacing = 2;   /* systray spacing */
@@ -8,12 +8,12 @@ static const int systraypinningfailfirst = 1;   /* 1: if pinning fails, display 
 static const int showsystray        = 1;     /* 0 means no systray */
 
 /* appearance */
-static const unsigned int borderpx  = 0;        /* border pixel of windows */
+static const unsigned int borderpx  = 3;        /* border pixel of windows */
 static const unsigned int snap      = 8;       /* snap pixel */
 static const int showbar            = 1;        /* 0 means no bar */
-static const int topbar             = 1;        /* 0 means bottom bar */
-static const char *fonts[]          = { "Hack:size=10" };
-static const char dmenufont[]       = "Hack:size=10";
+static const int topbar             = 0;        /* 0 means bottom bar */
+static const char *fonts[]          = { "Hack:size=11" };
+static const char dmenufont[]       = "Hack:size=11";
 static const char col_gray1[]       = "#222222";
 static const char col_gray2[]       = "#444444";
 static const char col_gray3[]       = "#bbbbbb";
@@ -34,7 +34,11 @@ static const Rule rules[] = {
 	 *	WM_NAME(STRING) = title
 	 */
 	/* class      instance    title       tags mask     isfloating   monitor */
-	{ "Gimp",     NULL,       NULL,       0,            1,           -1 },
+	{ "Xephyr",   NULL,       NULL,     1 << 8,            0,           -1 },
+	{ "Spotify",   NULL,       NULL,     1 << 7,            0,           -1 },
+	{ "discord",   NULL,       NULL,     1 << 6,            0,           -1 },
+	{ "Firefox",   NULL,       NULL,     1 << 3,            0,           -1 },
+	{ "jetbrains-clion",   NULL,       NULL,     1 << 0,            0,           -1 },
 };
 
 /* layout(s) */
@@ -50,7 +54,7 @@ static const Layout layouts[] = {
 };
 
 /* key definitions */
-#define MODKEY Mod1Mask
+#define MODKEY Mod4Mask
 #define TAGKEYS(KEY,TAG) \
 	{ MODKEY,                       KEY,      view,           {.ui = 1 << TAG} }, \
 	{ MODKEY|ControlMask,           KEY,      toggleview,     {.ui = 1 << TAG} }, \
@@ -63,7 +67,9 @@ static const Layout layouts[] = {
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
 static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
-static const char *termcmd[]  = { "terminator", NULL };
+static const char *termcmd[]  = { "st", NULL };
+static const char scratchpadname[] = "scratchpad";
+static const char *scratchpadcmd[] = { "st", "-t", scratchpadname, "-g", "120x34", NULL };
 
 static const char *fullquit[] = {"killall", "xinit"};
 
@@ -71,14 +77,15 @@ static Key keys[] = {
 	/* modifier                     key        function        argument */
 	{ MODKEY,                       XK_p,      spawn,          {.v = dmenucmd } },
 	{ MODKEY|ShiftMask,             XK_Return, spawn,          {.v = termcmd } },
-	{ MODKEY,                       XK_b,      togglebar,      {0} },
+    { MODKEY,                       XK_grave,  togglescratch,  {.v = scratchpadcmd } },
+    { MODKEY,                       XK_b,      togglebar,      {0} },
 	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
 	{ MODKEY,                       XK_k,      focusstack,     {.i = -1 } },
 	{ MODKEY,                       XK_i,      incnmaster,     {.i = +1 } },
 	{ MODKEY,                       XK_d,      incnmaster,     {.i = -1 } },
-	{ MODKEY,                       XK_h,      setmfact,       {.f = -0.05} },
-	{ MODKEY,                       XK_l,      setmfact,       {.f = +0.05} },
-	//{ MODKEY,                       XK_Return, zoom,           {0} },
+	{ MODKEY,                       XK_h,      setmfact,       {.f = -0.02} },
+	{ MODKEY,                       XK_l,      setmfact,       {.f = +0.02} },
+	{ MODKEY,                       XK_z, zoom,           {0} },
 	{ MODKEY,                       XK_Tab,    view,           {0} },
 	{ MODKEY|ShiftMask,             XK_c,      killclient,     {0} },
 	{ MODKEY,                       XK_t,      setlayout,      {.v = &layouts[0]} },
@@ -101,8 +108,8 @@ static Key keys[] = {
 	TAGKEYS(                        XK_7,                      6)
 	TAGKEYS(                        XK_8,                      7)
 	TAGKEYS(                        XK_9,                      8)
-	{ MODKEY|ShiftMask,             XK_q,      quit,           {0} },
-    {MODKEY,                        XK_q,      spawn,          {.v = fullquit}},
+	{ MODKEY,                       XK_q,      quit,           {0} },
+    {MODKEY|ShiftMask,                        XK_q,      spawn,          {.v = fullquit}},
 };
 
 /* button definitions */
