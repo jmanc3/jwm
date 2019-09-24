@@ -1,0 +1,3 @@
+/home/jmanc3/Projects/oddwm/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/jmanc3/Projects/oddwm/cmake-build-debug/CMakeFiles/dwm.dir
+/home/jmanc3/Projects/oddwm/cmake-build-debug/CMakeFiles/edit_cache.dir

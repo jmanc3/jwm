@@ -268,6 +268,7 @@ static int xerror(Display *dpy, XErrorEvent *ee);
 static int xerrordummy(Display *dpy, XErrorEvent *ee);
 static int xerrorstart(Display *dpy, XErrorEvent *ee);
 static void zoom(const Arg *arg);
+static void hideunhide(const Arg *arg);
 
 /* variables */
 static Systray *systray =  NULL;
@@ -2515,6 +2516,32 @@ systraytomon(Monitor *m) {
 	return t;
 }
 
+void
+hideunhide(const Arg *arg)
+{
+	Client *c;
+	Monitor *m;
+
+    Bool anymapped = False;
+    for (m = mons; m; m = m->next) {
+        for (c = m->clients; c; c = c->next) {
+            XWindowAttributes attr;
+            XGetWindowAttributes(dpy, c->win, &attr);
+            if (attr.map_state != IsUnmapped) {
+                anymapped = True;
+            }
+        }
+    }
+    for (m = mons; m; m = m->next) {
+        for (c = m->clients; c; c = c->next) {
+            if (anymapped) {
+                XUnmapWindow(dpy, c->win);
+            } else {
+                XMapWindow(dpy, c->win);
+            }
+        }
+    }
+}
 void
 zoom(const Arg *arg)
 {

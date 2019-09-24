@@ -1,0 +1,1 @@
+/bin/cc -g   CMakeFiles/dwm.dir/drw.c.o CMakeFiles/dwm.dir/dwm.c.o CMakeFiles/dwm.dir/util.c.o  -o dwm -lX11 -lXcomposite -lXrender -lX11 -lXext -lXdamage -lXfixes -lXft -lfreetype -lXinerama -lfontconfig -lfreetype -lXcomposite -lXrender -lXext -lXdamage -lXfixes -lXft -lfreetype -lXinerama -lfontconfig -lfreetype -lXinerama -lfontconfig 
